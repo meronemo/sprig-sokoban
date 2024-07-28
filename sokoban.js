@@ -94,38 +94,101 @@ p.wg
 ....
 ....`,
   map`
+...wwww
+.b.wwg.
+....b..
+wg....g
+wb.bgwg
+w....ww
+wwwbpww
+www..ww`,
+  map`
 p.....
 .b.wg.
 ...w..
 ......
 .wwb..
 .....g`,
-  
+  map`
+wwwww...
+wb.bw...
+w.w.w...
+w...wwww
+w......w
+www.pggw
+wbb..ggw
+wwwwwwww`,
+  map`
+wwwwwwwwww
+wbwbw.bbbw
+w...w...bw
+w...www..w
+w........w
+w..wwwp..w
+w.wgggw..w
+w..ggg...w
+w........w
+wwwwwwwwww`
 ];
 
 setMap(levels[level]);
 
 setPushables({
   [ player ]: [ box ],
-  [ box ]: [ player, box ]
+  [ box ]: [ box ]
 });
 
 let pull = 0;
 
 onInput("w", () => {
-  getFirst(player).y -= 1;
+  if (pull) {
+    const targetTile = getTile(getFirst(player).x, getFirst(player).y + 1);
+    if (targetTile.length !== 0 && targetTile[0].type === box) {
+      const targetBox = getFirst(box, getFirst(player).x, getFirst(player).y + 1);
+      getFirst(player).y -= 1;
+      targetTile[0].y -= 1;
+    }
+  } else {
+    getFirst(player).y -= 1;
+  }
 });
 
 onInput("s", () => {
-  getFirst(player).y += 1;
+  if (pull) {
+    const targetTile = getTile(getFirst(player).x, getFirst(player).y - 1);
+    if (targetTile.length !== 0 && targetTile[0].type === box) {
+      const targetBox = getFirst(box, getFirst(player).x, getFirst(player).y - 1);
+      getFirst(player).y += 1;
+      targetTile[0].y += 1;
+    }
+  } else {
+    getFirst(player).y += 1;
+  }
 });
 
 onInput("a", () => {
-  getFirst(player).x -= 1;
+  if (pull) {
+    const targetTile = getTile(getFirst(player).x + 1, getFirst(player).y);
+    if (targetTile.length !== 0 && targetTile[0].type === box) {
+      getFirst(player).x -= 1;
+      targetTile[0].x -= 1;
+    }
+  } else {
+    getFirst(player).x -= 1;
+  }
 });
 
 onInput("d", () => {
-  getFirst(player).x += 1;
+  if (pull) {
+    const targetTile = getTile(getFirst(player).x - 1, getFirst(player).y);
+    console.log(targetTile, getFirst(player), getFirst(player).x, getFirst(player).y);
+    if (targetTile.length !== 0 && targetTile[0].type === box) {
+      getFirst(player).x += 1;
+      targetTile[0].x += 1;
+    }
+  } else {
+    getFirst(player).x += 1;
+  }
 });
 
 onInput("j", () => {
